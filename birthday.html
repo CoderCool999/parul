@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Happy Birthday!</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            /* --- VARIABLES & RESET --- */
+            :root {
+                --pink-light: #ffe4e9;
+                --pink-med: #ffb3c6;
+                --pink-dark: #fb6f92;
+                --pink-pop: #ff0a54;
+                --text-color: #590d22;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            body {
+                font-family: "Patrick Hand", cursive;
+                background: linear-gradient(
+                    180deg,
+                    var(--pink-light) 0%,
+                    var(--pink-med) 100%
+                );
+                min-height: 100vh;
+                overflow-x: hidden; /* Prevent horizontal scroll */
+                position: relative;
+                color: var(--text-color);
+            }
+
+            /* --- FLOATING BACKGROUND DECORATION --- */
+            .bg-hearts {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 0;
+                overflow: hidden;
+            }
+            .heart-shape {
+                position: absolute;
+                bottom: -10%;
+                fill: rgba(255, 255, 255, 0.4);
+                animation: floatUp linear infinite;
+            }
+            /* Varying sizes and speeds for hearts */
+            .h1 {
+                left: 10%;
+                width: 30px;
+                animation-duration: 8s;
+                animation-delay: 0s;
+            }
+            .h2 {
+                left: 30%;
+                width: 50px;
+                animation-duration: 12s;
+                animation-delay: 2s;
+            }
+            .h3 {
+                left: 50%;
+                width: 20px;
+                animation-duration: 10s;
+                animation-delay: 4s;
+            }
+            .h4 {
+                left: 70%;
+                width: 40px;
+                animation-duration: 15s;
+                animation-delay: 1s;
+            }
+            .h5 {
+                left: 90%;
+                width: 25px;
+                animation-duration: 9s;
+                animation-delay: 3s;
+            }
+
+            @keyframes floatUp {
+                to {
+                    transform: translateY(-120vh) rotate(360deg);
+                }
+            }
+
+            /* --- MAIN CONTAINER --- */
+            #main-container {
+                position: relative;
+                z-index: 2; /* Above background */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 20px;
+                min-height: 100vh;
+                justify-content: flex-start;
+            }
+
+            /* General Class to hide elements before animation starts */
+            .hidden-initially {
+                opacity: 0;
+            }
+
+            /* --- 1. FUNKY TITLE STYLES --- */
+            .funky-title {
+                font-family: "Luckiest Guy", cursive;
+                font-size: 3.2rem;
+                text-transform: uppercase;
+                color: var(--pink-pop);
+                text-align: center;
+                line-height: 1.1;
+                text-shadow: 3px 3px 0px #fff;
+                margin-bottom: 20px;
+            }
+            /* CSS for individual letters dropping in */
+            .letter-span {
+                display: inline-block;
+                opacity: 0;
+                transform: translateY(-30px) rotate(-10deg);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .letter-span.is-visible {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+
+            /* --- 2. DATE BLOB STYLES --- */
+            .date-blob-container {
+                margin-bottom: 25px;
+                transform: scale(0); /* Hidden initially */
+                transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .date-blob-container.is-visible {
+                transform: scale(1);
+            }
+
+            .date-blob {
+                width: 130px;
+                height: 130px;
+                background: var(--pink-pop);
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                font-family: "Luckiest Guy", cursive;
+                font-size: 1.5rem;
+                line-height: 1.2;
+                box-shadow: 0 10px 20px rgba(251, 111, 146, 0.5);
+                /* Organic imperfect circle shape */
+                border-radius: 63% 37% 70% 30% / 45% 60% 40% 55%;
+                animation: blobWobble 6s ease-in-out infinite;
+            }
+            @keyframes blobWobble {
+                0%,
+                100% {
+                    border-radius: 63% 37% 70% 30% / 45% 60% 40% 55%;
+                }
+                50% {
+                    border-radius: 40% 60% 45% 55% / 60% 45% 55% 40%;
+                }
+            }
+
+            /* --- 3. COLLAGE STYLES --- */
+            .collage-section {
+                width: 100%;
+                max-width: 380px;
+                margin-bottom: 30px;
+                transition: all 0.8s ease-out;
+                transform: translateY(30px);
+            }
+            .collage-section.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .collage-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 10px;
+                margin-top: 40px;
+            }
+            .photo-frame {
+                background: #fff;
+                padding: 6px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 6px;
+                transform: rotate(0deg);
+                transition: transform 0.3s;
+            }
+            .photo-frame img {
+                width: 100%;
+                height: 140px;
+                object-fit: cover;
+                display: block;
+                border-radius: 4px;
+            }
+            /* Messy Polaroid look */
+
+            .photo-frame:nth-child(1) {
+                transform: rotate(4deg);
+                z-index: 1;
+            }
+            .photo-frame:nth-child(2) {
+                transform: rotate(-3deg);
+                z-index: 1;
+            }
+
+            /* --- 4. BUTTON STYLES --- */
+            .open-button-container {
+                transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform: scale(0.5);
+            }
+            .open-button-container.is-visible {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            .card-btn {
+                background: var(--pink-pop);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                font-size: 1.6rem;
+                font-family: "Luckiest Guy", cursive;
+                border-radius: 50px;
+                box-shadow: 0 8px 0 #c90842;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .card-btn:active {
+                transform: translateY(6px);
+                box-shadow: 0 2px 0 #c90842;
+                margin: 15px;
+            }
+
+            /* --- MODAL (MESSAGE CARD) --- */
+            #message-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 100;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+                padding: 20px;
+            }
+            #message-modal.modal-open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .modal-card {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                width: 100%;
+                max-width: 400px;
+                padding: 30px;
+                border-radius: 20px;
+                text-align: center;
+                border: 4px solid var(--pink-med);
+                transform: scale(0.7);
+                transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                position: relative;
+            }
+            #message-modal.modal-open .modal-card {
+                transform: scale(1);
+            }
+
+            .modal-card h2 {
+                font-family: "Luckiest Guy", cursive;
+                color: var(--pink-pop);
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+            .message-body {
+                font-size: 1.3rem;
+                line-height: 1.5;
+                color: #444;
+                margin-bottom: 30px;
+            }
+            .maker-credit {
+                font-weight: bold;
+                color: var(--pink-dark);
+            }
+            .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-size: 2rem;
+                color: var(--pink-pop);
+                cursor: pointer;
+                font-family: sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="bg-hearts">
+            <svg class="heart-shape h1" viewBox="0 0 32 29.6">
+                <path
+                    d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                />
+            </svg>
+            <svg class="heart-shape h2" viewBox="0 0 32 29.6">
+                <path
+                    d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                />
+            </svg>
+            <svg class="heart-shape h3" viewBox="0 0 32 29.6">
+                <path
+                    d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                />
+            </svg>
+            <svg class="heart-shape h4" viewBox="0 0 32 29.6">
+                <path
+                    d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                />
+            </svg>
+            <svg class="heart-shape h5" viewBox="0 0 32 29.6">
+                <path
+                    d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                />
+            </svg>
+        </div>
+
+        <div id="main-container">
+            <h1 class="funky-title hidden-initially" id="main-title">
+                HAPPY<br />BIRTHDAY<br />PARUL!
+            </h1>
+
+            <div class="date-blob-container">
+                <div class="date-blob hidden-initially" id="date-text">
+                    JAN <br />
+                    23RD
+                </div>
+            </div>
+
+            <div class="open-button-container hidden-initially" id="btn-area">
+                <button class="card-btn" onclick="toggleModal(true)">
+                    OPEN CARD 💌
+                </button>
+            </div>
+
+            <div class="collage-section hidden-initially" id="collage-area">
+                <div class="collage-grid">
+                    <div class="photo-frame">
+                        <img
+                            src="C:\Users\sharm\Downloads\IMG_1942.PNG"
+                            alt="Pic 2"
+                        />
+                    </div>
+                    <div class="photo-frame">
+                        <img
+                            src="C:\Users\sharm\Downloads\54543682-FF06-43EC-8788-9D69E8D689BB.JPG"
+                            alt="Pic 3"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="message-modal">
+            <div class="modal-card">
+                <span class="close-btn" onclick="toggleModal(false)">×</span>
+                <h2>Hey Birthday Girl!</h2>
+
+                <p class="message-body">
+                    Wishing you a very happy birthday. May your year be filled
+                    with lots of joy. May you achieve your dream of becoming an
+                    officer. Thank you for everything you gave me and everything
+                    you ever did for me. Thank you so much. Never forget I Love
+                    You and I'll always be sorry. Thank you for the time you
+                    gave me Officer Parul Sharma.
+                    <br /><br />
+                    Keep smiling babe✨
+                </p>
+
+                <div class="maker-credit">Love, Hari Om</div>
+            </div>
+        </div>
+
+        <script>
+            // --- Helper function to split text into animated letters ---
+            function prepareTextAnimation(elementId) {
+                const element = document.getElementById(elementId);
+                const htmlContent = element.innerHTML.trim();
+                element.innerHTML = ""; // Clear current content
+                element.style.opacity = 1; // Make container visible
+
+                // Split by <br> tags first to preserve lines
+                const lines = htmlContent.split(/<br\s*\/?>/i);
+
+                let totalLetters = 0;
+                lines.forEach((line, lineIndex) => {
+                    const lineContainer = document.createElement("div");
+                    // Split line into characters
+                    const chars = line.trim().split("");
+                    chars.forEach((char) => {
+                        const span = document.createElement("span");
+                        span.classList.add("letter-span");
+                        // Use non-breaking space for spaces so they don't collapse
+                        span.innerHTML = char === " " ? "&nbsp;" : char;
+                        lineContainer.appendChild(span);
+                        totalLetters++;
+                    });
+                    element.appendChild(lineContainer);
+                    // Add back the break if it's not the last line
+                    if (lineIndex < lines.length - 1) {
+                        element.appendChild(document.createElement("br"));
+                    }
+                });
+                return totalLetters;
+            }
+
+            // --- Helper function to trigger the letter animations sequentially ---
+            function animateLetters(elementId, startIndex, delayPerLetter) {
+                const letters = document.querySelectorAll(
+                    `#${elementId} .letter-span`,
+                );
+                letters.forEach((letter, i) => {
+                    setTimeout(
+                        () => {
+                            letter.classList.add("is-visible");
+                        },
+                        (startIndex + i) * delayPerLetter,
+                    );
+                });
+                // Return time when this sequence finishes
+                return (startIndex + letters.length) * delayPerLetter;
+            }
+
+            // --- MAIN ANIMATION SEQUENCER ---
+            window.addEventListener("load", () => {
+                // 1. Prepare texts
+                prepareTextAnimation("main-title");
+                prepareTextAnimation("date-text");
+
+                const letterDelay = 70; // Speed of individual letters popping up
+                let timeline = 500; // Initial start delay
+
+                // Sequence Step 1: Animate Main Title Letters
+                const titleFinishTime = animateLetters(
+                    "main-title",
+                    0,
+                    letterDelay,
+                );
+                timeline += titleFinishTime + 600; // Wait for title + extra pause
+
+                // Sequence Step 2: Pop in Date Blob container, then animate its letters
+                setTimeout(() => {
+                    document
+                        .querySelector(".date-blob-container")
+                        .classList.add("is-visible");
+                    document.getElementById("date-text").style.opacity = 1;
+                    // Start animating date letters slightly after blob appears
+                    setTimeout(() => {
+                        animateLetters("date-text", 0, letterDelay + 30); // Slightly slower for date
+                    }, 300);
+                }, timeline);
+
+                timeline += 1500; // Wait for date animation to finish
+
+                // Sequence Step 3: Show Collage
+                setTimeout(() => {
+                    document
+                        .getElementById("collage-area")
+                        .classList.add("is-visible");
+                }, timeline);
+
+                timeline += 800; // Wait for collage
+
+                // Sequence Step 4: Show Button
+                setTimeout(() => {
+                    document
+                        .getElementById("btn-area")
+                        .classList.add("is-visible");
+                }, timeline);
+            });
+
+            // --- MODAL CONTROL ---
+            function toggleModal(show) {
+                const modal = document.getElementById("message-modal");
+                if (show) {
+                    modal.classList.add("modal-open");
+                } else {
+                    modal.classList.remove("modal-open");
+                }
+            }
+        </script>
+    </body>
+</html>
